@@ -2,8 +2,12 @@
     <div class="flex min-h-screen bg-gray-300">
       <!-- Sidebar -->
       <div
-        :class="[`sidebar ${isCollapsed ? 'collapsed' : ''}`]"
-        class="sticky top-0 z-10 bg-gray-700 duration-350"
+         class="sticky top-0 z-10 min-h-screen duration-150"
+        :class="[!isCollapsed ? 'w-64' : 'w-16',
+          selectedColor == 'Red' ? 'bg-red-600' : 'bg-black',
+          selectedColor == 'Green' ? 'bg-green-600' : 'bg-black',
+          selectedColor == 'Blue' ? 'bg-blue-600' : 'bg-black']"
+
       >
         <div class="relative p-4">
           <!-- Sidebar Collapse Trigger -->
@@ -11,6 +15,11 @@
             <i :class="isCollapsed ? 'fa-solid fa-bars-right' : 'fa-solid fa-bars-left'" class="fa-solid fa-bars"></i>
           </span>
           <SidebarComponent :isCollapsed="isCollapsed" />
+
+          <select v-model="selectedColor" id="color" class="rounded-lg text-sm mt-5">
+            <option value="">Select a Color</option>
+            <option v-for="(color, index) in themeColors" :key="index" :value="color">{{ color }}</option>
+        </select>
         </div>
       </div>
 
@@ -56,11 +65,20 @@
   import Dropdown from '@/Components/Dropdown.vue';
   import DropdownLink from '@/Components/DropdownLink.vue';
   import SidebarComponent from '@/Components/SidebarComponent.vue';
-  import { ref } from 'vue';
+  import { ref, provide } from 'vue';
 
   const isCollapsed = ref(false);
 
   const collapseSidebar = () => {
     isCollapsed.value = !isCollapsed.value;
   };
+
+  const selectedColor = ref('')
+  provide('color', selectedColor)
+
+  const themeColors =ref([
+    'Blue',
+    'Red',
+    'Green'
+  ])
   </script>
